@@ -5,8 +5,7 @@ const {
   authMiddleware,
 } = require("../middleware/authentication");
 const {
-  createProductValidation,
-  updateProductValidation,
+  ProductValidation,
   deleteProductValidation,
   getAllProductsValidation,
 } = require("../validation/productValidator");
@@ -23,13 +22,13 @@ const {
 router.post(
   "/create",
   adminAuthMiddleware,
-  //validate(createProductValidation("createProduct")),
+  //validate(ProductValidation),
   createProduct
 );
 
 //get all products for admin and user
 router.get(
-  "/getAll",
+  "/view",
   authMiddleware,
   validate(getAllProductsValidation),
   getAllProducts
@@ -39,7 +38,7 @@ router.get(
 router.put(
   "/update/:productId",
   adminAuthMiddleware,
-  updateProductValidation,
+  validate(ProductValidation),
   updateProduct
 );
 

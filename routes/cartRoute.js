@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { authMiddleware } = require("../middleware/authentication");
 const {
-  adminAuthMiddleware,
-  authMiddleware,
-} = require("../middleware/authentication");
-const { createCartValidation } = require("../validation/cartValidator");
+  createCartValidation,
+  idCartValidation,
+} = require("../validation/cartValidator");
 const { validate } = require("../validation/validator");
 const {
   createCart,
@@ -22,12 +22,27 @@ router.post(
 );
 
 //update cart
-router.put("/update/:cartId", authMiddleware, updateCart);
+router.put(
+  "/update/:cartId",
+  authMiddleware,
+  validate(createCartValidation),
+  updateCart
+);
 
 //delete cart
-router.delete("/delete/:cartId", authMiddleware, deleteCart);
+router.delete(
+  "/delete/:cartId",
+  authMiddleware,
+  validate(idCartValidation),
+  deleteCart
+);
 
 //view cart
-router.get("/view/:cartId", authMiddleware, viewCart);
+router.get(
+  "/view/:cartId",
+  authMiddleware,
+  validate(idCartValidation),
+  viewCart
+);
 
 module.exports = router;

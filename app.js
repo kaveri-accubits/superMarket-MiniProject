@@ -18,17 +18,24 @@ db.sequelize.sync().then(() => {
 });
 
 //import routes
-const userRoute = require("./routes/userRoute");
-const productRoute = require("./routes/productRoute");
-const purchaseRoute = require("./routes/purchaseRoute");
+
 const categoryRoute = require("./routes/categoryRoute");
 const cartRoute = require("./routes/cartRoute");
+const orderRoute = require("./routes/orderRoute");
+const productRoute = require("./routes/productRoute");
+const purchaseRoute = require("./routes/purchaseRoute");
+const salesRoute = require("./routes/salesRoute");
+const unitRoute = require("./routes/unitRoute");
+const userRoute = require("./routes/userRoute");
 
-app.use("/user", userRoute);
+app.use("/cart", cartRoute);
+app.use("/category", categoryRoute);
+app.use("/order", orderRoute);
 app.use("/product", productRoute);
 app.use("/purchase", purchaseRoute);
-app.use("/category", categoryRoute);
-app.use("/cart", cartRoute);
+app.use("/sales", salesRoute);
+app.use("/unit", unitRoute);
+app.use("/user", userRoute);
 
 app.listen(process.env.PORT, (err) => {
   if (err) {

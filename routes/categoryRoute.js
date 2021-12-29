@@ -4,7 +4,10 @@ const {
   adminAuthMiddleware,
   authMiddleware,
 } = require("../middleware/authentication");
-const { createCategoryValidation } = require("../validation/categoryValidator");
+const {
+  createCategoryValidation,
+  idCategoryValidation,
+} = require("../validation/categoryValidator");
 const { validate } = require("../validation/validator");
 const {
   createCategory,
@@ -20,8 +23,6 @@ router.post(
   validate(createCategoryValidation),
   createCategory
 );
-//get all category
-router.get("/getAll", authMiddleware, getAllCategory);
 
 //update category
 router.put(
@@ -32,6 +33,19 @@ router.put(
 );
 
 //delete category
-router.delete("/delete/:categoryId", adminAuthMiddleware, deleteCategory);
+router.delete(
+  "/delete/:categoryId",
+  adminAuthMiddleware,
+  validate(idCategoryValidation),
+  deleteCategory
+);
+
+//get all category
+router.get(
+  "/view",
+  authMiddleware,
+  validate(idCategoryValidation),
+  getAllCategory
+);
 
 module.exports = router;

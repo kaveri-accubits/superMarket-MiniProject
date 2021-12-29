@@ -1,4 +1,4 @@
-const { body, query, validationResult } = require("express-validator");
+const { body, param } = require("express-validator");
 
 //validation for create purchase details by admin
 exports.createPurchaseDetailsValidation = [
@@ -34,4 +34,14 @@ exports.createPurchaseDetailsValidation = [
     .withMessage("dateOfPurchase is required")
     .bail(),
   body("productId").not().isEmpty().withMessage("productId is required").bail(),
+];
+
+exports.idPurchaseDetailsValidation = [
+  param("purchaseId")
+    .notEmpty()
+    .withMessage("purchaseId is required")
+    .bail()
+    .isInt()
+    .withMessage("purchaseId must be an integer")
+    .bail(),
 ];

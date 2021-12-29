@@ -3,6 +3,12 @@ const responseMessage = require("../../utils/responseMessage");
 const logger = require("../../utils/logger");
 
 const models = require("../../models/index");
+const {
+  addPurchase,
+  removePurchase,
+  purchaseUpdater,
+  viewPurchases,
+} = require("./purchaseService");
 
 //create purchase details
 async function createPurchaseDetails(req, res) {
@@ -14,31 +20,33 @@ async function createPurchaseDetails(req, res) {
     dateOfPurchase,
     productId,
   } = req.body;
+  const params = {
+    dealerName,
+    costPrice,
+    totalPrice,
+    stockPerDeal,
+    dateOfPurchase,
+    productId,
+  };
   try {
-    const purchaseDetails = await models.PurchaseDetails.create({
-      dealerName: dealerName,
-      costPrice: costPrice,
-      totalPrice: totalPrice,
-      stockPerDeal: stockPerDeal,
-      dateOfPurchase: dateOfPurchase,
-      productId: productId,
-    });
+    const purchaseData = await addPurchase(params);
     return response.success(
       res,
-      responseMessage.purchase.purchaseDetailsCreated,
-      purchaseDetails
+      responseMessage.purchase.purchaseCreated,
+      purchaseData
     );
-  } catch (error) {
+  } catch (err) {
     return response.internalServerError(
       res,
-      responseMessage.error.errorCreatingPurchaseDetails,
-      error
+      responseMessage.purchase.errorCreatingPurchase,
+      err
     );
   }
 }
 
 //update purchase details
 async function updatePurchaseDetails(req, res) {
+  const { purchaseId } = req.params;
   const {
     dealerName,
     costPrice,
@@ -47,32 +55,63 @@ async function updatePurchaseDetails(req, res) {
     dateOfPurchase,
     productId,
   } = req.body;
+  const params = {
+    dealerName,
+    costPrice,
+    totalPrice,
+    stockPerDeal,
+    dateOfPurchase,
+    productId,
+  };
   try {
-    const purchaseDetails = await models.PurchaseDetails.update(
-      {
-        dealerName: dealerName,
-        costPrice: costPrice,
-        totalPrice: totalPrice,
-        stockPerDeal: stockPerDeal,
-        dateOfPurchase: dateOfPurchase,
-        productId: productId,
-      },
-      {
-        where: {
-          id: req.params.purchaseId,
-        },
-      }
-    );
+    const purchaseData = await purchaseUpdater(purchaseId, params);
     return response.success(
       res,
-      responseMessage.purchase.purchaseDetailsUpdated,
-      purchaseDetails
+      responseMessage.purchase.purchaseUpdated,
+      purchaseData
     );
-  } catch (error) {
+  } catch (err) {
     return response.internalServerError(
       res,
-      responseMessage.error.errorUpdatingPurchaseDetails,
-      error
+      responseMessage.purchase.errorUpdatingPurchase,
+      err
+    );
+  }
+}
+
+//delete purchase details
+async function deletePurchaseDetails(req, res) {
+  const { purchaseId } = req.params;
+  try {
+    const purchaseData = await removePurchase(purchaseId);
+    return response.success(
+      res,
+      responseMessage.purchase.purchaseDeleted,
+      purchaseData
+    );
+  } catch (err) {
+    return response.internalServerError(
+      res,
+      responseMessage.purchase.errorDeletingPurchase,
+      err
+    );
+  }
+}
+
+//get all purchase details
+async function getAllPurchaseDetails(req, res) {
+  try {
+    const purchaseData = await viewPurchases();
+    return response.success(
+      res,
+      responseMessage.purchase.purchaseRetrieved,
+      purchaseData
+    );
+  } catch (err) {
+    return response.internalServerError(
+      res,
+      responseMessage.purchase.errorRetrievingPurchase,
+      err
     );
   }
 }
@@ -80,4 +119,6 @@ async function updatePurchaseDetails(req, res) {
 module.exports = {
   createPurchaseDetails,
   updatePurchaseDetails,
+  deletePurchaseDetails,
+  getAllPurchaseDetails,
 };

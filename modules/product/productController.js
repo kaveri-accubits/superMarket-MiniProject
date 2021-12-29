@@ -36,6 +36,7 @@ const createProduct = async (req, res) => {
           description,
           price,
           categoryId,
+          unitId,
           isAvailable,
           stockLeft,
         } = req.body;
@@ -46,6 +47,7 @@ const createProduct = async (req, res) => {
           description: description,
           price: price,
           categoryId: categoryId,
+          unitId: unitId,
           isAvailable: isAvailable,
           stockLeft: stockLeft,
           productImage: req.file.filename,
@@ -54,7 +56,11 @@ const createProduct = async (req, res) => {
         const category = await models.Categories.findOne({
           where: { id: categoryId },
         });
-        if (category) {
+        //check if unitId is valid
+        const unit = await models.unit.findOne({
+          where: { id: unitId },
+        });
+        if (category && unit) {
           const product = await addProduct(params);
           return response.success(
             res,

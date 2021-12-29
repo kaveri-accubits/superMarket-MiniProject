@@ -1,65 +1,74 @@
 const { body, query, param } = require("express-validator");
 
-exports.createProductValidation = (controller = "") => {
-  let rules = [];
-  switch (controller) {
-    case "createProduct": {
-      console.log("test", controller);
-      rules = [
-        body("productName")
-          .trim()
-          .notEmpty()
-          .bail()
-          .withMessage("Please enter Product name"),
-      ];
-      break;
-    }
-  }
-  return rules;
-};
+// exports.createProductValidation = (controller = "") => {
+//   let rules = [];
+//   switch (controller) {
+//     case "createProduct": {
+//       console.log("test", controller);
+//       rules = [
+//         body("productName")
+//
+//           .notEmpty()
+//           .bail()
+//           .withMessage("Please enter Product name"),
+//       ];
+//       break;
+//     }
+//   }
+//   return rules;
+// };
 
-//validation for create product by admin
-// exports.createProductValidation = [
-//   body("productName")
-//     .isLength({ min: 3 })
-//     .withMessage("productName must be atleast 3 characters long")
-//     .bail(),
-// body("description")
-//   .isLength({ min: 5 })
-//   .withMessage("description must be atleast 5 characters long")
-//   .bail(),
-// body("price").isNumeric().withMessage("price must be a number").bail(),
-// body("category")
-//   .isLength({ min: 3 })
-//   .withMessage("category must be atleast 3 characters long")
-//   .bail(),
-// body("isAvailable")
-//   .isBoolean()
-//   .withMessage("isAvailable must be a boolean")
-//   .bail(),
-// body("stockLeft").isNumeric().withMessage("stockLeft must be a number"),
-//];
-
-//validation for update product by admin
-exports.updateProductValidation = [
+//validation for create product
+exports.ProductValidation = [
   body("productName")
+    .notEmpty()
+    .withMessage("Please enter Product name")
+    .bail()
     .isLength({ min: 3 })
-    .withMessage("productName must be atleast 3 characters long")
+    .withMessage("Product name must be atleast 3 characters long")
     .bail(),
   body("description")
-    .isLength({ min: 5 })
-    .withMessage("description must be atleast 5 characters long")
-    .bail(),
-  body("price").isNumeric().withMessage("price must be a number").bail(),
-  body("category")
+    .notEmpty()
+    .withMessage("Please enter Product description")
+    .bail()
     .isLength({ min: 3 })
-    .withMessage("category must be atleast 3 characters long")
+    .withMessage("Product description must be atleast 3 characters long")
+    .bail(),
+  body("categoryId")
+    .notEmpty()
+    .withMessage("Please enter Product category")
+    .bail()
+    .isInt()
+    .withMessage("Product category must be an integer")
+    .bail(),
+  body("unitId")
+    .notEmpty()
+    .withMessage("Please enter Product unit id")
+    .bail()
+    .isInt()
+    .withMessage("Product unit must be an integer")
+    .bail(),
+  body("price")
+    .notEmpty()
+    .withMessage("Please enter Product price")
+    .bail()
+    .isNumeric()
+    .withMessage("Product price must be numeric")
+    .bail(),
+  body("stockLeft")
+    .notEmpty()
+    .withMessage("Please enter Product stock left")
+    .bail()
+    .isInt()
+    .withMessage("Product stock left must be an integer")
     .bail(),
   body("isAvailable")
+    .notEmpty()
+    .withMessage("Please enter Product availability")
+    .bail()
     .isBoolean()
-    .withMessage("isAvailable must be a boolean")
+    .withMessage("Product availability must be boolean")
     .bail(),
-  body("stockLeft").isNumeric().withMessage("stockLeft must be a number"),
 ];
 
 //validation for delete product by admin

@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.unit.hasMany(models.product, {
+      // unitId is the foreign key of product
+      this.hasMany(models.Products, {
         foreignKey: "unitId",
         as: "unit",
       });
@@ -17,11 +18,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   unit.init(
     {
-      unit: DataTypes.STRING,
+      unitName: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "unit",
+    },
+    //freeze table name
+    {
+      freezeTableName: true,
     }
   );
   return unit;

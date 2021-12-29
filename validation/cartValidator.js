@@ -1,4 +1,4 @@
-const { body, query, validationResult } = require("express-validator");
+const { body, param } = require("express-validator");
 
 //validation for create cart
 exports.createCartValidation = [
@@ -9,5 +9,15 @@ exports.createCartValidation = [
     .withMessage("quantity is required")
     .isNumeric()
     .withMessage("quantity must be numeric")
+    .bail(),
+];
+
+exports.idCartValidation = [
+  param("cartId")
+    .notEmpty()
+    .withMessage("cartId is required")
+    .bail()
+    .isInt()
+    .withMessage("cartId must be an integer")
     .bail(),
 ];
